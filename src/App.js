@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Image,
   StyleSheet,
   Text,
   View
@@ -9,6 +10,7 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Image source={require('./assets/img/app-icon.png')} style={{width: 80, height: 80}}/>
         <Text style={styles.welcome}>
           Welcome to React Native!
         </Text>
