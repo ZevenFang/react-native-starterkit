@@ -1,41 +1,53 @@
 import React from 'react';
-import {Text, FlatList} from 'react-native';
-import { List, ListItem } from 'react-native-elements'
+import {Text, FlatList, View} from 'react-native';
+import { List, ListItem, Icon } from 'react-native-elements';
+import {connect} from 'dva/mobile';
+import moment from 'moment';
+import Touch from '../components/Touch';
+import PlaceHolder from '../components/PlaceHolder';
+import message from '../utils/message';
 
-const list = [
-  {
-    name: 'Amy Farha',
-    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-    subtitle: 'Vice President'
-  },
-  {
-    name: 'Chris Jackson',
-    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-    subtitle: 'Vice Chairman'
-  },
-];
-
+@connect(({github, loading})=>({github, loading}))
 class ExamplePage extends React.Component {
+
+  static navigationOptions = {
+    title: 'Example'
+  };
+
+  componentDidMount() {
+    this.props.dispatch({
+      type: 'github/getRepos',
+      query: 'react-native-starterkit'
+    })
+  }
 
   _renderItem ({item}) {
     return (
-      <ListItem
-        roundAvatar
-        title={item.name}
-        subtitle={item.subtitle}
-        avatar={{uri:item.avatar_url}}
-      />
+      <Touch onPress={()=>message.show('updated '+moment(item.updated_at).fromNow())}>
+        <ListItem
+          rightIcon={
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text>{item.stargazers_count} </Text>
+              <Icon size={15} name={item.stargazers_count>0?"favorite":"favorite-border"}/>
+            </View>}
+          roundAvatar
+          title={item.full_name}
+          subtitle={item.description}
+          avatar={{uri:item.owner.avatar_url}}
+        />
+      </Touch>
     )
   }
 
   _keyExtractor = (item, index) => index;
 
   render() {
-
+    let {github, loading} = this.props;
     return (
-      <List>
+      loading&&github.list.length===0?<PlaceHolder loading={loading.global}/>:
+      <List style={{marginTop: 0}}>
         <FlatList
-          data={list}
+          data={github.list}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
         />

@@ -11,7 +11,7 @@ import navigation from '../utils/navigation';
 export default class HomePage extends Component {
 
   static navigationOptions = {
-    title: '首页',
+    title: 'Home',
     headerLeft: <View/>
   };
 
