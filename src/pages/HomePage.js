@@ -5,6 +5,8 @@ import {
   Text,
   View
 } from 'react-native';
+import Touch from '../components/Touch';
+import navigation from '../utils/navigation';
 
 export default class HomePage extends Component {
 
@@ -23,6 +25,9 @@ export default class HomePage extends Component {
         <Text style={styles.instructions}>
           To get started, edit src/App.js
         </Text>
+        <Touch onPress={()=>navigation.navigate('Example')}>
+          <Text>Click here to dva demo</Text>
+        </Touch>
       </View>
     );
   }
